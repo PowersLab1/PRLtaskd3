@@ -89,7 +89,7 @@ class LabJsWrapper extends Component {
         }
         
         that.setState({sendingData: true});
-        that.saveTaskDataWithRetry(parsedData, 2); // New method for saving data with retry
+        that.saveTaskDataWithRetry(parsedData, 11); // second number = how many attempts to make before giving up +1
       }
     });
   }
@@ -105,7 +105,7 @@ class LabJsWrapper extends Component {
         setTimeout(() => {
           console.log("Retrying to save task data...");
           that.saveTaskDataWithRetry(parsedData, attempts - 1);
-        }, 1000); // Retry after 1 second delay
+        }, 2000); // Retry after 1 second delay
       } else {
         // Handle failure after retries
         console.error("Failed to save task data after retries:", error);
@@ -158,7 +158,8 @@ class LabJsWrapper extends Component {
           </main>
         </div>
         <div className="center" style={{visibility: this.state.sendingData ? 'visible' : 'hidden'}}>
-          <h2>Saving data... do not exit window</h2>
+          <h2>Saving data... do not exit window. Check internet and Refresh if stuck here for over 30 seconds.</h2>
+          <p>If you lost internet connection during the game, then the game will restart and you will need to play again.</p>
         </div>
       </div>
     );
