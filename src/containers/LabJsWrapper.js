@@ -74,8 +74,30 @@ class LabJsWrapper extends Component {
   //}
 
   componentDidMount() {
-    console.log('in componentdidmount')
+    
+    console.log('This is the latest labjswrapper.js')
     var that = this;
+
+    const taskData = sessionStorage.getItem('taskData');
+    if (taskData) {
+      console.log('taskData found in sessionStorage');
+      const parsedData = JSON.parse(taskData);
+      // If localhost, we're done at this point
+      if (isLocalhost) {
+        console.log('in islocalhost');
+        console.log(that.surveyUrl);
+        if (that.surveyUrl) {
+          console.log('in that.surveyUrl');
+          that.setState({link: that.surveyUrl});
+        }
+        return;
+      }
+      that.setState({sendingData: true});
+      console.log('Im tryna call aws cuz i have session storage stuff');
+      that.setState({sendingData: true});
+      that.saveTaskDataWithRetry(parsedData, 11); // second number = how many attempts to make before giving up +1
+    }
+
     window.addEventListener('message', function(event) {
       if (event.data.type === 'labjs.data') {
         const parsedData = JSON.parse(event.data.json);
